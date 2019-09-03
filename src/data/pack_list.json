@@ -1,0 +1,68 @@
+[
+  {
+    "value": "",
+    "label": "卡包"
+  },
+  {
+    "value": "pack_1",
+    "label": "第一期",
+    "children": [
+      {"value": "VOL01", "label": "VOL01"},
+      {"value": "VOL02", "label": "VOL02"},
+      {"value": "VOL03", "label": "VOL03"},
+      {"value": "VOL04", "label": "VOL04"},
+      {"value": "VOL05", "label": "VOL05"},
+      {"value": "VOL06", "label": "VOL06"},
+      {"value": "VOL07", "label": "VOL07"},
+      {"value": "STARTER_BOX", "label": "STARTER_BOX"},
+      {"value": "STARTER_BOX", "label": "EX"}
+    ]
+  },
+  {
+    "value": "pack_2",
+    "label": "第二期",
+    "children": [
+      {"value": "MR", "label": "MR"},
+      {"value": "PS", "label": "PS"},
+      {"value": "CA", "label": "CA"},
+      {"value": "TB", "label": "TB"},
+      {"value": "SM", "label": "SM"},
+      {"value": "LN", "label": "LN"},
+      {"value": "SC", "label": "SC"},
+      {"value": "MA", "label": "MA"},
+      {"value": "PH", "label": "PH"},
+      {"value": "LB", "label": "LB"},
+      {"value": "PG", "label": "PG"},
+      {"value": "RB", "label": "RB"},
+      {"value": "ME", "label": "ME"},
+      {"value": "YU", "label": "YU"},
+      {"value": "YJ", "label": "YJ"},
+      {"value": "KA", "label": "KA"},
+      {"value": "PE", "label": "PE"}
+    ]
+  },
+  {
+    "value": "pack_3",
+    "label": "第三期",
+    "children": [
+      {"value": "p301", "label": "301"},
+      {"value": "p302", "label": "302"},
+      {"value": "p303", "label": "303"},
+      {"value": "p304", "label": "304"},
+      {"value": "p305", "label": "305"},
+      {"value": "p306", "label": "306"},
+      {"value": "p307", "label": "307"},
+      {"value": "p308", "label": "308"},
+      {"value": "p309", "label": "309"},
+      {"value": "DL01", "label": "DL01"},
+      {"value": "DL02", "label": "DL02"},
+      {"value": "DL03", "label": "DL03"},
+      {"value": "DL04", "label": "DL04"},
+      {"value": "DL05", "label": "DL05"},
+      {"value": "SY2", "label": "SY2"},
+      {"value": "SJ2", "label": "SJ2"},
+      {"value": "SK2", "label": "SK2"},
+      {"value": "SDM", "label": "SDM"}
+    ]
+  }
+]
