@@ -1,16 +1,16 @@
 
 
-import cards from '../data/cards';
+import cards from '../../public/data/cards_mode';
 
-import pack_1 from '../data/pack_1';
-import pack_2 from '../data/pack_2';
-import pack_3 from '../data/pack_3';
+import pack_1 from '../../public/data/pack_1';
+import pack_2 from '../../public/data/pack_2';
+import pack_3 from '../../public/data/pack_3';
 
 const localSearch = function (searchField) {
-  let packs = { pack_1, pack_2, pack_3 };
-  let {name, id, pack, attribute, type, race, level} = searchField;
+  let {name, id, pack, attribute, type, race, level, text} = searchField;
   let result = [];
 
+  let cardList = getPackCardList(pack[0], pack[1]);
   cards.forEach((card)=>{
     let flag = true;
 
@@ -18,6 +18,19 @@ const localSearch = function (searchField) {
       flag = false;
     }
     if(id && card.id.indexOf(id) === -1){
+      flag = false;
+    }
+    if(text && (
+        card.id.indexOf(text) === -1 ||
+        card.name.indexOf(text) === -1 ||
+        card.desc.indexOf(text) === -1 ||
+        card.cardType.indexOf(text) === -1 ||
+        card.cardDType.indexOf(text) === -1 ||
+        card.enName.indexOf(text) === -1 ||
+        card.japName.indexOf(text) === -1 ||
+        card.race.indexOf(text) === -1 ||
+        card.attribute.indexOf(text) === -1
+      )){
       flag = false;
     }
     if(attribute && card.attribute !== attribute){
@@ -33,100 +46,40 @@ const localSearch = function (searchField) {
       flag = false;
     }
     if(flag){
-      if(pack && pack.length === 2){
-        if(pack && packs[pack[0]][pack[1]].includes(card.id)){
-          result.push(card);
-        }
-      }else{
+      if(cardList.includes(card.id)){
         result.push(card);
       }
     }
   });
-
+  console.log(result.length)
   return result;
 };
 
-const valueTransfer = function (name, value) {
-  let transformed = value;
-  switch (name){
-    case "category": transformed = transferCategory(value); break;
-    case "type": transformed = transferCategory(value); break;
-    case "attribute": transformed = transferAttribute(value); break;
-    case "race": transformed = transferRace(value); break;
-    case "level": transformed = transferLevel(value); break;
-    case "atk": transformed = transferNum(value); break;
-    case "def": transformed = transferNum(value);break;
+const getPackCardList = function (pack, vol) {
+  let array = [];
+  console.log(pack, vol);
+
+  let packs = { pack_1, pack_2, pack_3 };
+  if(pack === "all"){
+    cards.forEach((card)=>{
+      array.push(card.id);
+    })
+  }else if(pack === "before_3"){
+    for(let _pack in packs){
+      for(let i in packs[_pack]) {
+        if (!vol || vol === i) {
+          array.push(...packs[_pack][i])
+        }
+      }
+    }
+  }else{
+    for(let i in packs[pack]){
+      if(vol === "" || vol === i){
+        array.push(...packs[pack][i])
+      }
+    }
   }
-  return transformed;
+  return Array.from(new Set(array));
 };
 
-const transferCategory = function (value) {
-  let transformed = value;
-  // switch (value){
-  //
-  // }
-  return transformed;
-};
-const transferAttribute = function (value) {
-  let transformed = value;
-  switch (value){
-    case 0: transformed = "魔陷"; break;
-    case 1: transformed = "地"; break;
-    case Math.pow(2,1): transformed = "水"; break;
-    case Math.pow(2,2): transformed = "炎"; break;
-    case Math.pow(2,3): transformed = "风"; break;
-    case Math.pow(2,4): transformed = "光"; break;
-    case Math.pow(2,5): transformed = "暗"; break;
-    case Math.pow(2,6): transformed = "神"; break;
-  }
-  return transformed;
-};
-const transferRace = function (value) {
-  let transformed = value;
-  switch (value){
-    case 0: transformed = "-"; break;
-    case 1: transformed = "战士"; break;
-    case Math.pow(2,1): transformed = "魔法师"; break;
-    case Math.pow(2,2): transformed = "天使"; break;
-    case Math.pow(2,3): transformed = "恶魔"; break;
-    case Math.pow(2,4): transformed = "不死"; break;
-    case Math.pow(2,5): transformed = "机械"; break;
-    case Math.pow(2,6): transformed = "水"; break;
-    case Math.pow(2,7): transformed = "炎"; break;
-    case Math.pow(2,8): transformed = "岩石"; break;
-    case Math.pow(2,9): transformed = "鸟兽"; break;
-    case Math.pow(2,10): transformed = "植物"; break;
-    case Math.pow(2,11): transformed = "昆虫"; break;
-    case Math.pow(2,12): transformed = "雷"; break;
-    case Math.pow(2,13): transformed = "龙"; break;
-    case Math.pow(2,14): transformed = "兽"; break;
-    case Math.pow(2,15): transformed = "兽战士"; break;
-    case Math.pow(2,16): transformed = "恐龙"; break;
-    case Math.pow(2,17): transformed = "鱼"; break;
-    case Math.pow(2,18): transformed = "海龙"; break;
-    case Math.pow(2,19): transformed = "爬虫"; break;
-    case Math.pow(2,20): transformed = "念动力"; break;
-    case Math.pow(2,21): transformed = "幻神兽"; break;
-    case Math.pow(2,22): transformed = "创造神"; break;
-    case Math.pow(2,23): transformed = "幻龙"; break;
-    case Math.pow(2,24): transformed = "电子界"; break;
-  }
-  return transformed;
-};
-const transferLevel = function (value) {
-  let transformed = value;
-  switch (value){
-    case 0: transformed = "-";  break;
-    case value>12: transformed = "-";  break;
-  }
-  return transformed;
-};
-const transferNum = function (value) {
-  let transformed = value;
-  switch (value){
-    case "-2": transformed = "？"; break;
-  }
-  return transformed;
-};
-
-export {localSearch, valueTransfer}
+export {localSearch}

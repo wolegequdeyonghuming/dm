@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="home">
     <!--筛选栏-->
     <el-form ref="form" :model="form" inline>
       <el-form-item>
-        <el-input v-model="form.name" placeholder="卡名"></el-input>
+        <el-input v-model="form.text" placeholder="关键字"></el-input>
       </el-form-item>
       <el-form-item>
         <el-select v-model="form.attribute" placeholder="属性">
@@ -37,53 +37,26 @@
       <el-button @click="search" type="primary">查询</el-button>
     </el-form>
 
-    <el-table :data="tableData" border :height="tableHeight">
+    <el-table
+            :data="tableData"
+            border
+            :height="tableHeight"
+            :row-class-name="tableRowClassName"
+            @row-click="onRowClick">
 
       <el-table-column prop="id" label="ID" width="120"></el-table-column>
 
       <el-table-column prop="name" label="名称" width="200"></el-table-column>
 
-      <el-table-column label="category" width="86">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("category", scope.row.category) }}</span>
-        </template>
-      </el-table-column>>
+      <el-table-column prop="attribute" label="属性" width="80"></el-table-column>
 
-      <el-table-column label="type" width="80">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("type", scope.row.type) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="race" label="种族" width="80"> </el-table-column>
 
-      <el-table-column label="属性" width="80">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("attribute", scope.row.attribute) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="level" label="等级/阶级" width="90"></el-table-column>
 
-      <el-table-column prop="race" label="种族" width="80">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("race", scope.row.race) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="atk" label="攻击" width="80"> </el-table-column>
 
-      <el-table-column prop="level" label="等级/阶级" width="90">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("level", scope.row.level) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="atk" label="攻击" width="80">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("atk", scope.row.atk) }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="def" label="防御" width="80">
-        <template slot-scope="scope">
-          <span>{{ valueTransfer("def", scope.row.def) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="def" label="防御" width="80"> </el-table-column>
 
       <el-table-column prop="desc" label="描述/效果"></el-table-column>
 
@@ -105,58 +78,104 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="tableCopyTableList.length">
     </el-pagination>
+
+
+    <el-dialog title="详情" :visible.sync="dialogFormVisible" width="920px">
+      <el-form :model="dialogFrom" size="small" style="width: 680px; display: inline-block" inline>
+        <el-form-item label="名称" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.name" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="ID" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.id" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="日文名" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.japName" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="英文名" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.enName" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="星级/阶级/LINK" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.level" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="属性" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.attribute" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="种族" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.race" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="卡片种类" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.cardType" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="效果种类" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.cardDType" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="卡包" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.package" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="攻" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.attribute" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="守" :label-width="formLabelWidth">
+          <el-input v-model="dialogFrom.attribute" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="效果/描述" :label-width="formLabelWidth">
+          <!--<el-input v-model="dialogFrom.desc" readonly type="textarea" autosize></el-input>-->
+          <p style="margin: 0; color: #666; max-width: 520px;">{{dialogFrom.desc}}</p>
+        </el-form-item>
+      </el-form>
+      <img :src="dialogFrom.id && getPic(dialogFrom.id)" width="176" height="254" style="float:right"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import pack_list from '../data/pack_list';
-  import {localSearch, valueTransfer} from '../js/localSearch';
+  import pack_list from '../../public/data/pack_list';
+  import {localSearch} from '../js/localSearch';
 
   const attribute_list = [
     { label: "属性", value: "" },
     { label: "魔陷", value: 0 },
-    { label: "地", value: Math.pow(2,0) },
-    { label: "水", value: Math.pow(2,1) },
-    { label: "炎", value: Math.pow(2,2) },
-    { label: "风", value: Math.pow(2,3) },
-    { label: "光", value: Math.pow(2,4) },
-    { label: "暗", value: Math.pow(2,5) },
-    { label: "神", value: Math.pow(2,6) },
+    { label: "地" },
+    { label: "水"},
+    { label: "炎" },
+    { label: "风" },
+    { label: "光" },
+    { label: "暗" },
+    { label: "神" },
   ];
   const race_list = [
     { label: "种族", value: "" },
-    { label: "战士", value: Math.pow(2,0) },
-    { label: "魔法师", value: Math.pow(2,1) },
-    { label: "天使", value: Math.pow(2,2) },
-    { label: "恶魔", value: Math.pow(2,3) },
-    { label: "不死", value: Math.pow(2,4) },
-    { label: "机械", value: Math.pow(2,5) },
-    { label: "水", value: Math.pow(2,6) },
-    { label: "炎", value: Math.pow(2,7) },
-    { label: "岩石", value: Math.pow(2,8) },
-    { label: "鸟兽", value: Math.pow(2,9) },
-    { label: "植物", value: Math.pow(2,10) },
-    { label: "昆虫", value: Math.pow(2,11) },
-    { label: "雷", value: Math.pow(2,12) },
-    { label: "龙", value: Math.pow(2,13) },
-    { label: "兽", value: Math.pow(2,14) },
-    { label: "兽战士", value: Math.pow(2,15) },
-    { label: "恐龙", value: Math.pow(2,16) },
-    { label: "鱼", value: Math.pow(2,17) },
-    { label: "海龙", value: Math.pow(2,18) },
-    { label: "爬虫", value: Math.pow(2,19) },
-    { label: "念动力", value: Math.pow(2,20) },
-    { label: "幻神兽", value: Math.pow(2,21) },
-    { label: "创造神", value: Math.pow(2,22) },
-    { label: "幻龙", value: Math.pow(2,23) },
-    { label: "电子界", value: Math.pow(2,24) },
+    { label: "战士", },
+    { label: "魔法师", },
+    { label: "天使", },
+    { label: "恶魔", },
+    { label: "不死", },
+    { label: "机械", },
+    { label: "水", },
+    { label: "炎", },
+    { label: "岩石",},
+    { label: "鸟兽"},
+    { label: "植物" },
+    { label: "昆虫"},
+    { label: "雷" },
+    { label: "龙"},
+    { label: "兽"},
+    { label: "兽战士"},
+    { label: "恐龙" },
+    { label: "鱼"},
+    { label: "海龙" },
+    { label: "爬虫"},
+    { label: "念动力"},
+    { label: "幻神兽" },
+    { label: "创造神"},
+    { label: "幻龙" },
+    { label: "电子界" },
   ];
 
   export default {
     name: "Home",
     data(){
       return{
-        valueTransfer,
         options: {
           pack_list,
           attribute_list,
@@ -165,16 +184,21 @@
         form: {
           name: "",
           id: "",
-          pack: [""],
+          pack: ["none", ""],
           attribute: "",
           type: "",
           race: "",
-          level: ""
+          level: "",
+          text: "",
         },
         tableData: [],
         tableCopyTableList: [],
         index: 1,
-        size: 10
+        size: 10,
+
+        dialogFormVisible: false,
+        formLabelWidth: '120px',
+        dialogFrom: {}
       }
     },
     computed:{
@@ -188,6 +212,7 @@
         this.tableData = localSearch(this.form);
         this.tableCopyTableList = JSON.parse(JSON.stringify(this.tableData));
         this.tableData = this.paging(this.size, this.index);
+        console.log(this.tableData);
       },
       getPic(id){
         return require(`../../public/pics/${id}.jpg`);
@@ -212,6 +237,17 @@
           }
         });
         return tablePush;
+      },
+
+      tableRowClassName({row}){
+        return row.modeRare === "R"? "rare" :
+          row.modeRare === "UR"? "ultra-rare" : ""
+      },
+
+      onRowClick(row){
+        // console.log(row);
+        this.dialogFormVisible = true;
+        this.dialogFrom = row;
       }
     },
     created() {
@@ -220,6 +256,11 @@
   }
 </script>
 
-<style scoped>
-
+<style>
+  .home .rare{
+    background-color: #fff59f;
+  }
+  .home .ultra-rare{
+    background-color: #ff9b62;
+  }
 </style>

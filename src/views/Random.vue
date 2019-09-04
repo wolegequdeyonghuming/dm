@@ -57,7 +57,7 @@
           <p>{{item1.name}}</p>
           <p>{{valueTransfer('attribute', item1.attribute)}} - {{valueTransfer('race', item1.race)}}</p>
           <p>ATK:{{valueTransfer('atk', item1.atk)}} / DEF:{{valueTransfer('def', item1.def)}}</p>
-          <p>标准价格：<input type="text" placeholder="price">DP</p>
+          <p>标准价格：<input type="text" placeholder="price" value="500">DP</p>
         </div>
       </div>
       <div class="grid"
@@ -70,7 +70,7 @@
           <p>{{item2.name}}</p>
           <p>{{valueTransfer('attribute', item2.attribute)}} - {{valueTransfer('race', item2.race)}}</p>
           <p>ATK:{{valueTransfer('atk', item2.atk)}} / DEF:{{valueTransfer('def', item2.def)}}</p>
-          <p>标准价格：<input type="text" placeholder="price">DP</p>
+          <p>标准价格：<input type="text" placeholder="price" value="10">DP</p>
         </div>
       </div>
     </div>
@@ -78,8 +78,8 @@
 </template>
 
 <script>
-  import cards from '../data/cards';
-  import pack_list from '../data/pack_list';
+  import cards from '../../public/data/cards';
+  import pack_list from '../../public/data/pack_list';
   import {localSearch, valueTransfer} from '../js/localSearch';
 
   export default {
@@ -97,7 +97,7 @@
           pool: "",
           rare_pool: "",
           normal_size: 0,
-          rare_size: 10,
+          rare_size: 0,
         },
         tableData: [],
         rdData: [],
@@ -118,6 +118,7 @@
           return;
         }
         this.tableData = localSearch(this.form);
+        console.log(this.tableData)
       },
       getPic(id){
         return require(`../../public/pics/${id}.jpg`);

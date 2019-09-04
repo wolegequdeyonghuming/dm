@@ -8,7 +8,8 @@
       <el-main>
         <nav>
           <router-link class="nav-link" to="/">卡查</router-link>
-          <router-link class="nav-link" to="/rd">随机抽卡</router-link>
+          <router-link class="nav-link" to="/sf">Shuffle</router-link>
+          <router-link class="nav-link" to="/pl">随机抽卡</router-link>
         </nav>
         <router-view/>
       </el-main>
