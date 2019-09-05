@@ -39,7 +39,7 @@
       <template v-for="(item1,index1) in normal_result">
         <div class="grid rare"
              v-if="item1.modeRare === 'R'"
-             :key="'n'+index1">
+             :key="'r'+index1">
           <div class="grid-left">
             <img :src="getPic(item1.id)" width="88">
           </div>
@@ -51,8 +51,8 @@
           </div>
         </div>
         <div class="grid ultra-rare"
-             v-if="item1.modeRare === 'UR'"
-             :key="'n'+index1">
+             v-else-if="item1.modeRare === 'UR'"
+             :key="'ur'+index1">
           <div class="grid-left">
             <img :src="getPic(item1.id)" width="88">
           </div>
@@ -194,6 +194,7 @@
     display: flex;
     margin: 20px;
     background: aliceblue;
+    overflow: hidden;
   }
 
   .grid.rare{
@@ -205,6 +206,8 @@
 
   .grid p {
     margin: 4px 8px 8px 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .grid input{
