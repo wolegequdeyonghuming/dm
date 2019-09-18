@@ -118,10 +118,9 @@
           return;
         }
         this.tableData = localSearch(this.form);
-        console.log(this.tableData)
       },
       getPic(id){
-        return require(`../../public/pics/${id}.jpg`);
+        return require(`./img/${id}.jpg`);
       },
       roll() {
         try{

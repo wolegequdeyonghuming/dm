@@ -11,7 +11,7 @@
                   v-for="item in options.attribute_list"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
+                  :value="item.label">
           </el-option>
         </el-select>
       </el-form-item>
@@ -21,7 +21,7 @@
                   v-for="item in options.race_list"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
+                  :value="item.label">
           </el-option>
         </el-select>
       </el-form-item>
@@ -184,7 +184,7 @@
         form: {
           name: "",
           id: "",
-          pack: ["none", ""],
+          pack: ["all", ""],
           attribute: "",
           type: "",
           race: "",
@@ -215,7 +215,11 @@
         console.log(this.tableData);
       },
       getPic(id){
-        return require(`../../public/pics/${id}.jpg`);
+        try{
+          return `./img/${id}.jpg`
+        }catch (e) {
+          return null;
+        }
       },
       // 页数改变事件
       handleSizeChange(size) {

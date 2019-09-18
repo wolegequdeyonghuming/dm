@@ -136,7 +136,8 @@
       },
       getPic(id){
         try{
-          return require(`../../public/pics/${id}.jpg`);
+          // return require(`../../public/pics/${id}.jpg`);
+          return `./img/${id}.jpg`
         }catch (e) {
           return null;
         }

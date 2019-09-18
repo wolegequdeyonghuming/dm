@@ -1,9 +1,5 @@
 [
   {
-    "value": "none",
-    "label": "不指定"
-  },
-  {
     "value": "all",
     "label": "所有卡包"
   },

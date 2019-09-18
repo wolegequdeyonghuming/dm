@@ -9,6 +9,15 @@ import pack_3 from '../../public/data/pack_3';
 const localSearch = function (searchField) {
   let {name, id, pack, attribute, type, race, level, text} = searchField;
   let result = [];
+  if(race === "种族"){
+    race = null;
+  }
+  if(attribute === "属性"){
+    attribute = null;
+  }
+  if(attribute === "魔陷"){
+    attribute = "0";
+  }
 
   let cardList = getPackCardList(pack[0], pack[1]);
   cards.forEach((card)=>{
@@ -17,21 +26,38 @@ const localSearch = function (searchField) {
     if(name && card.name.indexOf(name) === -1){
       flag = false;
     }
-    if(id && card.id.indexOf(id) === -1){
+    if(id && card.id.toString().indexOf(id) === -1){
       flag = false;
     }
-    if(text && (
-        card.id.indexOf(text) === -1 ||
-        card.name.indexOf(text) === -1 ||
-        card.desc.indexOf(text) === -1 ||
-        card.cardType.indexOf(text) === -1 ||
-        card.cardDType.indexOf(text) === -1 ||
-        card.enName.indexOf(text) === -1 ||
-        card.japName.indexOf(text) === -1 ||
-        card.race.indexOf(text) === -1 ||
-        card.attribute.indexOf(text) === -1
-      )){
-      flag = false;
+
+    if(text
+      // && (
+      //   card.id.toString().indexOf(text) === -1 &&
+      //   card.name.indexOf(text) === -1 &&
+      //   card.desc.indexOf(text) === -1 &&
+      //   (card.cardType && card.cardType.indexOf(text) === -1) &&
+      //   (card.cardDType && card.cardDType.indexOf(text) === -1) &&
+      //   (card.enName && card.enName.indexOf(text) === -1) &&
+      //   (card.japName && card.japName.indexOf(text) === -1) &&
+      //   (card.race && card.race.indexOf(text) === -1) &&
+      //   (card.attribute && card.attribute.indexOf(text) === -1)
+      // )
+    ){
+      if(
+        card.id.toString().indexOf(text) !== -1 ||
+        card.name.indexOf(text) !== -1 ||
+        card.desc.indexOf(text) !== -1 ||
+        (card.cardType && card.cardType.indexOf(text) !== -1) ||
+        (card.cardDType && card.cardDType.indexOf(text) !== -1) ||
+        // (card.enName && card.enName.indexOf(text) !== -1) ||
+        // (card.japName && card.japName.indexOf(text) !== -1) ||
+        (card.race && card.race.indexOf(text) !== -1) ||
+        (card.attribute && card.attribute.indexOf(text) !== -1)
+      ){
+        //do nothing
+      }else{
+        flag = false;
+      }
     }
     if(attribute && card.attribute !== attribute){
       flag = false;
